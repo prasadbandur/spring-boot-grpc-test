@@ -1,5 +1,8 @@
 package com.omio.springbootgrpctest;
 
+import com.omio.springbootgrpctest.model.CalculatorRequest;
+import com.omio.springbootgrpctest.model.CalculatorResponse;
+import com.omio.springbootgrpctest.model.CalculatorServiceGrpc;
 import com.omio.springbootgrpctest.model.HelloRequest;
 import com.omio.springbootgrpctest.model.HelloResponse;
 import com.omio.springbootgrpctest.model.HelloServiceGrpc;
@@ -10,15 +13,31 @@ public class GrpcClient {
 
     public static void main(String[] args) {
         ManagedChannel channel = ManagedChannelBuilder
-            .forAddress("localhost", 8080).usePlaintext().build();
+            .forAddress("localhost", 6666).usePlaintext().build();
+        consumeHelloService(channel);
+        consumeCalculatorService(channel);
+        channel.shutdown();
+    }
 
+    private static void consumeHelloService(ManagedChannel channel) {
         HelloServiceGrpc.HelloServiceBlockingStub stub = HelloServiceGrpc.newBlockingStub(channel);
-
-        HelloResponse helloResponse = stub.hello(HelloRequest.newBuilder()
+        HelloRequest helloRequest = HelloRequest.newBuilder()
             .setFirstName("Prasad")
             .setLastName("Bandur")
-            .build());
+            .build();
+        HelloResponse helloResponse = stub.hello(helloRequest);
         System.out.println("helloResponse ===> "+helloResponse);
-        channel.shutdown();
+    }
+
+    private static void consumeCalculatorService(ManagedChannel channel) {
+        CalculatorServiceGrpc.CalculatorServiceBlockingStub calcStub = CalculatorServiceGrpc.newBlockingStub(channel);
+        CalculatorRequest calculatorRequest = buildCalculatorRequest(1, 2, "+");
+        CalculatorResponse calculatorResponse = calcStub.calculate(calculatorRequest);
+
+        System.out.println(calculatorResponse);
+    }
+
+    private static CalculatorRequest buildCalculatorRequest(int number1, int number2, String operator) {
+        return CalculatorRequest.newBuilder().setNumber1(number1).setNumber2(number2).setOperator(operator).build();
     }
 }

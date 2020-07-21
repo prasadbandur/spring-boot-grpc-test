@@ -4,8 +4,10 @@ import com.omio.springbootgrpctest.model.HelloRequest;
 import com.omio.springbootgrpctest.model.HelloResponse;
 import com.omio.springbootgrpctest.model.HelloServiceGrpc.HelloServiceImplBase;
 import io.grpc.stub.StreamObserver;
+import org.lognet.springboot.grpc.GRpcService;
 
-public class HelloServiceImpl extends HelloServiceImplBase {
+@GRpcService
+public class HelloService extends HelloServiceImplBase {
 
     @Override
     public void hello(HelloRequest request, StreamObserver<HelloResponse> responseStreamObserver) {
