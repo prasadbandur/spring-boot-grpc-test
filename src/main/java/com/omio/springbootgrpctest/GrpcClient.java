@@ -8,7 +8,9 @@ import com.omio.springbootgrpctest.model.HelloResponse;
 import com.omio.springbootgrpctest.model.HelloServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class GrpcClient {
 
     public static void main(String[] args) {
@@ -26,7 +28,7 @@ public class GrpcClient {
             .setLastName("Bandur")
             .build();
         HelloResponse helloResponse = stub.hello(helloRequest);
-        System.out.println("helloResponse ===> "+helloResponse);
+        log.info("helloResponse ===> {} ", helloResponse);
     }
 
     private static void consumeCalculatorService(ManagedChannel channel) {
@@ -34,7 +36,7 @@ public class GrpcClient {
         CalculatorRequest calculatorRequest = buildCalculatorRequest(1, 2, "+");
         CalculatorResponse calculatorResponse = calcStub.calculate(calculatorRequest);
 
-        System.out.println(calculatorResponse);
+        log.info("calculatorResponse ===> {} ", calculatorResponse);
     }
 
     private static CalculatorRequest buildCalculatorRequest(int number1, int number2, String operator) {
