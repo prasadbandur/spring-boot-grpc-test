@@ -4,14 +4,16 @@ import com.omio.springbootgrpctest.model.HelloRequest;
 import com.omio.springbootgrpctest.model.HelloResponse;
 import com.omio.springbootgrpctest.model.HelloServiceGrpc.HelloServiceImplBase;
 import io.grpc.stub.StreamObserver;
-import org.lognet.springboot.grpc.GRpcService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-@GRpcService
+@Component
+@Slf4j
 public class HelloService extends HelloServiceImplBase {
 
     @Override
     public void hello(HelloRequest request, StreamObserver<HelloResponse> responseStreamObserver) {
-        System.out.println("Received request ===> "+request);
+        log.info("Received HelloService request ===> {} ", request);
 
         String greeting = new StringBuilder("Hello, ")
             .append(request.getFirstName())

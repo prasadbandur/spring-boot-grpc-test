@@ -2,14 +2,17 @@ package com.omio.springbootgrpctest.service;
 
 import com.omio.springbootgrpctest.model.CalculatorResponse;
 import com.omio.springbootgrpctest.model.CalculatorServiceGrpc.CalculatorServiceImplBase;
-import org.lognet.springboot.grpc.GRpcService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-@GRpcService
+@Component
+@Slf4j
 public class CalculatorService extends CalculatorServiceImplBase {
 
     @Override
     public void calculate(com.omio.springbootgrpctest.model.CalculatorRequest request,
                           io.grpc.stub.StreamObserver<com.omio.springbootgrpctest.model.CalculatorResponse> responseObserver) {
+        log.info("Received CalculatorService request ===> {} ", request);
         long result = 0;
         switch(request.getOperator()) {
             case "+":
@@ -30,4 +33,5 @@ public class CalculatorService extends CalculatorServiceImplBase {
         responseObserver.onNext(CalculatorResponse.newBuilder().setResult(result).build());
         responseObserver.onCompleted();
     }
+
 }
